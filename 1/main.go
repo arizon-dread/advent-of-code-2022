@@ -43,6 +43,11 @@ func main() {
 	fmt.Printf("total number of elves: %d \n", len(sortedElfs))
 	hungriestElf := sortedElfs[len(sortedElfs)-1]
 	fmt.Printf("hungriestElf calories: %d \n", hungriestElf)
+	var top3elvesTotalCals int
+	for i := 1; i < 4; i++ {
+		top3elvesTotalCals += sortedElfs[len(sortedElfs)-i].totalCalories
+	}
+	fmt.Printf("Top 3 summed cals: %d", top3elvesTotalCals)
 
 	dat.Close()
 }
