@@ -1,6 +1,6 @@
 package main
 
-type snack struct {
+type elf struct {
 	snax          []int
 	totalCalories int
 }

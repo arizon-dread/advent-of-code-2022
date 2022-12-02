@@ -11,8 +11,8 @@ import (
 func main() {
 	dat, err := os.Open("input.txt")
 
-	var content []snack
-	content = append(content, snack{})
+	var elfs []elf
+	elfs = append(elfs, elf{})
 	if err != nil {
 		fmt.Printf("shit went south, %v\n", err)
 	}
@@ -25,34 +25,32 @@ func main() {
 		num, err := strconv.Atoi(t)
 		if err == nil {
 			//fmt.Printf("line: %v", num)
-			content[len(content)-1].snax = append(content[len(content)-1].snax, num)
+			elfs[len(elfs)-1].snax = append(elfs[len(elfs)-1].snax, num)
 		} else {
-			content = append(content, snack{})
+			elfs = append(elfs, elf{})
 		}
 
 	}
-	var result []snack
-	for _, item := range content {
+	var sortedElfs []elf
+	for _, item := range elfs {
 		calculateTotal(&item)
-		result = append(result, item)
+		sortedElfs = append(sortedElfs, item)
 	}
-	//fmt.Printf("does this have calories: %d ? \n", result[0].totalCalories)
 
-	sort.Slice(result, func(i, j int) bool {
-		return result[i].totalCalories < result[j].totalCalories
+	sort.Slice(sortedElfs, func(i, j int) bool {
+		return sortedElfs[i].totalCalories < sortedElfs[j].totalCalories
 	})
-	fmt.Printf("total number of elves: %d \n", len(result))
-	snarre := result[len(result)-1]
-	fmt.Printf("snarre calories: %d \n", snarre)
+	fmt.Printf("total number of elves: %d \n", len(sortedElfs))
+	hungriestElf := sortedElfs[len(sortedElfs)-1]
+	fmt.Printf("hungriestElf calories: %d \n", hungriestElf)
 
 	dat.Close()
 }
 
-func calculateTotal(s *snack) {
+func calculateTotal(s *elf) {
 	total := 0
 	for _, item := range s.snax {
 		total += item
 	}
 	s.totalCalories = s.totalCalories + total
-	//fmt.Printf("does this have calories: %d ? \n", s.totalCalories)
 }
