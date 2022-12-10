@@ -69,10 +69,10 @@ func calculateScoreForGame(game *game) {
 	//find out who won
 	if game.opponent == game.player {
 		fmt.Printf("DRAW, opponent == player\n")
-		game.score += 3
+		game.score = 3
 	} else if game.opponent < game.player {
 		fmt.Printf("WIN! %d < %d!\n", game.opponent, game.player)
-		game.score += 6
+		game.score = 6
 	} else {
 		fmt.Printf("LOSE!\n")
 	}
