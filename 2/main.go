@@ -45,7 +45,7 @@ func main() {
 	var totalScore int
 	for _, g := range games {
 		fmt.Printf("totalscore: %d, gamescore to add: %d. ", totalScore, g.score)
-		totalScore = totalScore + g.score
+		totalScore += g.score
 		fmt.Printf("after adding: %d\n", totalScore)
 	}
 	fmt.Printf("Total score for player: %d\n", totalScore)
