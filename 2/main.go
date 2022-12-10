@@ -70,7 +70,7 @@ func calculateScoreForGame(game *game) {
 	if game.opponent == game.player {
 		fmt.Printf("DRAW, opponent == player\n")
 		game.score = 3
-	} else if game.opponent < game.player {
+	} else if game.player == game.opponent+1 || game.player+2 == game.opponent {
 		fmt.Printf("WIN! %d < %d!\n", game.opponent, game.player)
 		game.score = 6
 	} else {
