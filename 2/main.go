@@ -29,7 +29,7 @@ func main() {
 			if i == 0 {
 				game.opponent, err = getRPS(item)
 			} else {
-				game.player, err = getRPS(item)
+				game.player, err = determineResponse(game.opponent, item) //Part one day two: getRPS(item)
 				fmt.Printf("After aligning values: opponent: %v, player: %v\n", game.opponent, game.player)
 			}
 			if err != nil {
@@ -63,6 +63,27 @@ func getRPS(r string) (rune, error) {
 		return 'C', nil
 	}
 	return 'D', errors.New("unexpected input")
+}
+
+func determineResponse(opRune rune, outcome string) (rune, error) {
+	//X == lose
+	//Y == draw
+	//Z == win
+
+	if outcome == "X" {
+		if opRune == 'A' {
+			return 'C', nil
+		}
+		return opRune - 1, nil
+	} else if outcome == "Y" {
+		return opRune, nil
+	} else {
+		if opRune == 'C' {
+			return 'A', nil
+		}
+		return opRune + 1, nil
+	}
+
 }
 
 func calculateScoreForGame(game *game) {
