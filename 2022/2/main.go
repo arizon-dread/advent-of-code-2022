@@ -17,7 +17,7 @@ func main() {
 		fmt.Printf("Could not read game input file, %v\n", err)
 	}
 	fileScanner := bufio.NewScanner(dat)
-	fileScanner.Split((bufio.ScanLines))
+	fileScanner.Split(bufio.ScanLines)
 	fmt.Printf("Reading lines in file...\n")
 	for fileScanner.Scan() {
 		t := fileScanner.Text()
