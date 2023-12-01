@@ -3,12 +3,13 @@ package main
 import (
 	"fmt"
 	"os"
+	"sort"
 	"strconv"
 	"strings"
-	"unicode"
 )
 
 var numbers = [10]string{"zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine"}
+var n = [10]string{"0", "1", "2", "3", "4", "5", "6", "7", "8", "9"}
 
 //var numberPresent = map[string]bool{"one": true, "two": true, "three": true, "four": true, "five": true, "six": true, "seven": true, "eight": true, "nine": true}
 
@@ -23,26 +24,41 @@ func main() {
 	sArr := strings.Split(s, "\n")
 	total := 0
 	for _, line := range sArr {
-		// numberMap := map[int]int{}
-		// for i, v := range numbers {
-		// 	if strings.Contains(line, v) {
-		// 		index := strings.Index(line, v)
-		// 		numberMap[index] = i
-		// 	}
-		// }
-
-		digits := strings.Map(func(r rune) rune {
-			if unicode.IsNumber(r) {
-				return r
+		numberMap := map[int]int{}
+		for i, v := range numbers {
+			if strings.Contains(line, v) {
+				index := strings.Index(line, v)
+				numberMap[index] = i
 			}
-			return 'a'
-		}, line)
-		digits = strings.ReplaceAll(digits, "a", "")
+		}
+		for i, v := range n {
+			if strings.Contains(line, v) {
+				index := strings.Index(line, v)
+				numberMap[index] = i
+			}
+		}
+		fmt.Println(line)
+		//print(numberMap)
+		keys := make([]int, 0, len(numberMap))
+		for k, _ := range numberMap {
+			keys = append(keys, k)
+		}
+		sort.Ints(keys)
+		first := numberMap[keys[0]]
+		last := numberMap[keys[len(keys)-1]]
 
-		first := string(digits[0])
-		last := string(digits[len(digits)-1])
+		// digits := strings.Map(func(r rune) rune {
+		// 	if unicode.IsNumber(r) {
+		// 		return r
+		// 	}
+		// 	return 'a'
+		// }, line)
+		// digits = strings.ReplaceAll(digits, "a", "")
 
-		final := first + last
+		// first := string(digits[0])
+		// last := string(digits[len(digits)-1])
+		final := strconv.Itoa(first) + strconv.Itoa(last)
+		fmt.Printf("%v and %v = %v\n", first, last, final)
 		n, err := strconv.Atoi(final)
 		if err != nil {
 			fmt.Printf("error converting string %v to int: %v", final, err)
@@ -54,11 +70,9 @@ func main() {
 	fmt.Printf("total: %v\n", total)
 }
 
-func replaceWithDigit(s string) (int, error) {
-	for i, v := range numbers {
-		if s == v {
-			return i, nil
-		}
+func print(numberMap map[int]int) {
+	for k, v := range numberMap {
+		fmt.Printf("index: %v, value: %v ", k, v)
 	}
-	return 0, fmt.Errorf("error finding index of %v", s)
+	fmt.Printf("\n")
 }
