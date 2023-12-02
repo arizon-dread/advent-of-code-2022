@@ -6,6 +6,7 @@ import (
 	"sort"
 	"strconv"
 	"strings"
+	"unicode"
 )
 
 var numbers = [10]string{"zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine"}
@@ -29,16 +30,20 @@ func main() {
 			if strings.Contains(line, v) {
 				index := strings.Index(line, v)
 				numberMap[index] = i
+				index = strings.LastIndex(line, v)
+				numberMap[index] = i
 			}
 		}
 		for i, v := range n {
 			if strings.Contains(line, v) {
 				index := strings.Index(line, v)
 				numberMap[index] = i
+				index = strings.LastIndex(line, v)
+				numberMap[index] = i
 			}
 		}
-		fmt.Println(line)
-		//print(numberMap)
+		// fmt.Println(line)
+		// print(numberMap)
 		keys := make([]int, 0, len(numberMap))
 		for k, _ := range numberMap {
 			keys = append(keys, k)
@@ -47,18 +52,10 @@ func main() {
 		first := numberMap[keys[0]]
 		last := numberMap[keys[len(keys)-1]]
 
-		// digits := strings.Map(func(r rune) rune {
-		// 	if unicode.IsNumber(r) {
-		// 		return r
-		// 	}
-		// 	return 'a'
-		// }, line)
-		// digits = strings.ReplaceAll(digits, "a", "")
-
-		// first := string(digits[0])
-		// last := string(digits[len(digits)-1])
+		//final := getAllDigits(line)
 		final := strconv.Itoa(first) + strconv.Itoa(last)
-		fmt.Printf("%v and %v = %v\n", first, last, final)
+
+		//fmt.Printf("%v and %v = %v\n", first, last, final)
 		n, err := strconv.Atoi(final)
 		if err != nil {
 			fmt.Printf("error converting string %v to int: %v", final, err)
@@ -68,6 +65,20 @@ func main() {
 		// fmt.Printf("%v\n", line)
 	}
 	fmt.Printf("total: %v\n", total)
+}
+
+func getAllDigits(line string) string {
+	digits := strings.Map(func(r rune) rune {
+		if unicode.IsNumber(r) {
+			return r
+		}
+		return 'a'
+	}, line)
+	digits = strings.ReplaceAll(digits, "a", "")
+
+	first := string(digits[0])
+	last := string(digits[len(digits)-1])
+	return first + last
 }
 
 func print(numberMap map[int]int) {
