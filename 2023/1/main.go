@@ -25,35 +25,11 @@ func main() {
 	sArr := strings.Split(s, "\n")
 	total := 0
 	for _, line := range sArr {
-		numberMap := map[int]int{}
-		for i, v := range numbers {
-			if strings.Contains(line, v) {
-				index := strings.Index(line, v)
-				numberMap[index] = i
-				index = strings.LastIndex(line, v)
-				numberMap[index] = i
-			}
-		}
-		for i, v := range n {
-			if strings.Contains(line, v) {
-				index := strings.Index(line, v)
-				numberMap[index] = i
-				index = strings.LastIndex(line, v)
-				numberMap[index] = i
-			}
-		}
-		// fmt.Println(line)
-		// print(numberMap)
-		keys := make([]int, 0, len(numberMap))
-		for k, _ := range numberMap {
-			keys = append(keys, k)
-		}
-		sort.Ints(keys)
-		first := numberMap[keys[0]]
-		last := numberMap[keys[len(keys)-1]]
-
+		//1a
 		//final := getAllDigits(line)
-		final := strconv.Itoa(first) + strconv.Itoa(last)
+
+		//1b
+		final := getDigitsAndLetterNumbers(line)
 
 		//fmt.Printf("%v and %v = %v\n", first, last, final)
 		n, err := strconv.Atoi(final)
@@ -79,6 +55,37 @@ func getAllDigits(line string) string {
 	first := string(digits[0])
 	last := string(digits[len(digits)-1])
 	return first + last
+}
+
+func getDigitsAndLetterNumbers(line string) string {
+	numberMap := map[int]int{}
+	for i, v := range numbers {
+		if strings.Contains(line, v) {
+			index := strings.Index(line, v)
+			numberMap[index] = i
+			index = strings.LastIndex(line, v)
+			numberMap[index] = i
+		}
+	}
+	for i, v := range n {
+		if strings.Contains(line, v) {
+			index := strings.Index(line, v)
+			numberMap[index] = i
+			index = strings.LastIndex(line, v)
+			numberMap[index] = i
+		}
+	}
+	// fmt.Println(line)
+	// print(numberMap)
+	keys := make([]int, 0, len(numberMap))
+	for k, _ := range numberMap {
+		keys = append(keys, k)
+	}
+	sort.Ints(keys)
+	first := numberMap[keys[0]]
+	last := numberMap[keys[len(keys)-1]]
+
+	return strconv.Itoa(first) + strconv.Itoa(last)
 }
 
 func print(numberMap map[int]int) {
