@@ -35,14 +35,15 @@ func main() {
 				continue
 			}
 			if unicode.IsDigit(char) {
-				numbers[i][j] = string(char)
+				digit := string(char)
+				//numbers[i][j] =
 			out:
 				for k := 1; k < len(l); k++ {
 					if j+k >= len(l) {
 						break out
 					}
 					if unicode.IsDigit(rune(l[j+k])) {
-						numbers[i][j] += string(l[j+k])
+						digit += string(l[j+k])
 						//fmt.Printf("another digit: %c\nnumbers: %v\n", l[j+k], numbers[i][j])
 					} else {
 						//increment j but subtract one to accomodate for j++
@@ -50,7 +51,7 @@ func main() {
 						break out
 					}
 				}
-				digit := numbers[i][j]
+				numbers[i][j] = digit
 
 				valid := false
 				if index > 0 {
