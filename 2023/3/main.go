@@ -29,13 +29,12 @@ func main() {
 		//loop over each char on the line
 		for j := 0; j < len(l); j++ {
 			index := j
-
-			char := rune(l[j])
-			if char == '.' {
+			r := rune(l[j])
+			if r == '.' {
 				continue
 			}
-			if unicode.IsDigit(char) {
-				digit := string(char)
+			if unicode.IsDigit(r) {
+				digit := string(r)
 				//numbers[i][j] =
 			out:
 				for k := 1; k < len(l); k++ {
@@ -51,50 +50,55 @@ func main() {
 						break out
 					}
 				}
-				numbers[i][j] = digit
+				numbers[i][index] = digit
 
-				valid := false
-				if index > 0 {
-					if _, exists := specialChars[i][index-1]; exists {
-						valid = true
-					}
-				}
-				if len(specialChars[i]) >= index+len(digit)+1 {
-					if _, exists := specialChars[i][index+len(digit)+1]; exists {
-						valid = true
-					}
-				}
-				if i == 0 {
-					//fmt.Printf("check below\n")
-					if existsAboveOrBelow(i, index, specialChars, (len(digit)), "below") {
-						valid = true
-					}
-				} else if i == 139 {
-					//fmt.Printf("check above\n")
-					if existsAboveOrBelow(i, index, specialChars, (len(digit)), "above") {
-						valid = true
-					}
-				} else {
-					//fmt.Printf("check both\n")
-					if existsAboveOrBelow(i, index, specialChars, (len(digit)), "both") {
-						valid = true
-					}
-				}
-				if valid {
-					if digit != "" {
-						fmt.Printf("match: %v\n", digit)
-						fmt.Printf("number: %v\n", digit)
-						fmt.Printf("index: %v\nline: %v\n---\n", index, i)
-					}
-
-					total += strToInt(digit)
-				}
 			} else {
 				//fmt.Printf("found a special char! %c\n", char)
-				specialChars[i][j] = string(char)
+				specialChars[i][j] = string(r)
 			}
 		}
 
+	}
+	for i := 0; i < len(numbers); i++ {
+		for j, d := range numbers[i] {
+
+			valid := false
+			if j > 0 {
+				if _, exists := specialChars[i][j-1]; exists {
+					valid = true
+				}
+			}
+			if j+len(d) >= len(specialChars[i]) {
+				if _, exists := specialChars[i][j+len(d)]; exists {
+					valid = true
+				}
+			}
+			if i == 0 {
+				//fmt.Printf("check below\n")
+				if existsAboveOrBelow(i, j, specialChars, (len(d)), "below") {
+					valid = true
+				}
+			} else if i == 139 {
+				//fmt.Printf("check above\n")
+				if existsAboveOrBelow(i, j, specialChars, (len(d)), "above") {
+					valid = true
+				}
+			} else {
+				//fmt.Printf("check both\n")
+				if existsAboveOrBelow(i, j, specialChars, (len(d)), "both") {
+					valid = true
+				}
+			}
+			if valid {
+				// if d != "" {
+				// 	fmt.Printf("match: %v\n", d)
+				// 	fmt.Printf("number: %v\n", d)
+				// 	fmt.Printf("index: %v\nline: %v\n---\n", j+1, i+1)
+				// }
+
+				total += strToInt(d)
+			}
+		}
 	}
 
 	fmt.Printf("total: %v\n", total)
@@ -105,6 +109,7 @@ func strToInt(s string) int {
 	if err == nil {
 		return n
 	}
+	fmt.Printf("error converting string to int, %v", err)
 	return 0
 }
 
