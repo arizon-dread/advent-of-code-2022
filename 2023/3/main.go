@@ -81,9 +81,12 @@ func main() {
 					}
 				}
 				if valid {
-					fmt.Printf("match: %v\n", digit)
-					fmt.Printf("number: %v\n", digit)
-					fmt.Printf("index: %v\nline: %v\n---\n", index, i)
+					if digit != "" {
+						fmt.Printf("match: %v\n", digit)
+						fmt.Printf("number: %v\n", digit)
+						fmt.Printf("index: %v\nline: %v\n---\n", index, i)
+					}
+
 					total += strToInt(digit)
 				}
 			} else {
