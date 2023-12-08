@@ -81,11 +81,11 @@ func addHitsToTotal(specialChars []map[int]string, numbers []map[int]string, tot
 					valid = true
 				}
 			}
-			if j+len(d) >= len(specialChars[i]) && !valid {
-				if _, exists := specialChars[i][j+len(d)]; exists {
-					valid = true
-				}
+			//if j+len(d) <= len(specialChars[i]) && !valid {
+			if _, exists := specialChars[i][j+len(d)]; exists {
+				valid = true
 			}
+			//}
 			if i == 0 && !valid {
 				//fmt.Printf("check below\n")
 				if existsAboveOrBelow(i, j, specialChars, (len(d)), "below") {
