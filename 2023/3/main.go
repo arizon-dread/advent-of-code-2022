@@ -68,33 +68,33 @@ func main() {
 					valid = true
 				}
 			}
-			if j+len(d) >= len(specialChars[i]) {
+			if j+len(d) >= len(specialChars[i]) && !valid {
 				if _, exists := specialChars[i][j+len(d)]; exists {
 					valid = true
 				}
 			}
-			if i == 0 {
+			if i == 0 && !valid {
 				//fmt.Printf("check below\n")
 				if existsAboveOrBelow(i, j, specialChars, (len(d)), "below") {
 					valid = true
 				}
-			} else if i == 139 {
+			} else if i == 139 && !valid {
 				//fmt.Printf("check above\n")
 				if existsAboveOrBelow(i, j, specialChars, (len(d)), "above") {
 					valid = true
 				}
 			} else {
 				//fmt.Printf("check both\n")
-				if existsAboveOrBelow(i, j, specialChars, (len(d)), "both") {
+				if existsAboveOrBelow(i, j, specialChars, (len(d)), "both") && !valid {
 					valid = true
 				}
 			}
 			if valid {
-				// if d != "" {
-				// 	fmt.Printf("match: %v\n", d)
-				// 	fmt.Printf("number: %v\n", d)
-				// 	fmt.Printf("index: %v\nline: %v\n---\n", j+1, i+1)
-				// }
+				if d != "" {
+					fmt.Printf("match: %v\n", d)
+					fmt.Printf("number: %v\n", d)
+					fmt.Printf("index: %v\nline: %v\n---\n", j+1, i+1)
+				}
 
 				total += strToInt(d)
 			}
