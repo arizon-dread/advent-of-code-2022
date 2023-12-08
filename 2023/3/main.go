@@ -20,7 +20,7 @@ func main() {
 	sArr := strings.Split(s, "\n")
 
 	specialChars, numbers := getCharsAndNumbers(sArr)
-	var total int = 0
+	total := 0
 
 	addHitsToTotal(specialChars, numbers, &total)
 
