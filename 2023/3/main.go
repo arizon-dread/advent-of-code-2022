@@ -19,9 +19,18 @@ func main() {
 
 	sArr := strings.Split(s, "\n")
 
+	specialChars, numbers := getCharsAndNumbers(sArr)
+	var total int = 0
+
+	addHitsToTotal(specialChars, numbers, &total)
+
+	fmt.Printf("total: %v\n", total)
+}
+
+func getCharsAndNumbers(sArr []string) ([]map[int]string, []map[int]string) {
 	specialChars := make([]map[int]string, 140)
 	numbers := make([]map[int]string, 140)
-	var total int = 0
+
 	//loop over each line in turn
 	for i, l := range sArr {
 		specialChars[i] = make(map[int]string, 10)
@@ -59,6 +68,10 @@ func main() {
 		}
 
 	}
+	return specialChars, numbers
+}
+
+func addHitsToTotal(specialChars []map[int]string, numbers []map[int]string, total *int) {
 	for i := 0; i < len(numbers); i++ {
 		for j, d := range numbers[i] {
 
@@ -96,12 +109,10 @@ func main() {
 					fmt.Printf("index: %v\nline: %v\n---\n", j+1, i+1)
 				}
 
-				total += strToInt(d)
+				*total += strToInt(d)
 			}
 		}
 	}
-
-	fmt.Printf("total: %v\n", total)
 }
 
 func strToInt(s string) int {
