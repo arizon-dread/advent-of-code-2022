@@ -27,14 +27,17 @@ func main() {
 	fmt.Printf("total: %v\n", total)
 }
 
-func getCharsAndNumbers(sArr []string) ([]map[int]string, []map[int]string) {
-	specialChars := make([]map[int]string, 140)
-	numbers := make([]map[int]string, 140)
+func getCharsAndNumbers(sArr []string) (map[xy]string, map[xy]string) {
+
+	specialChars := make(map[xy]string)
+	numbers := make(map[xy]string)
+	// specialChars := make([]map[int]string, 140)
+	// numbers := make([]map[int]string, 140)
 
 	//loop over each line in turn
 	for i, l := range sArr {
-		specialChars[i] = make(map[int]string, 10)
-		numbers[i] = make(map[int]string, 10)
+		// specialChars[i] = make(map[int]string, 10)
+		// numbers[i] = make(map[int]string, 10)
 		//loop over each char on the line
 		for j := 0; j < len(l); j++ {
 			index := j
@@ -59,11 +62,20 @@ func getCharsAndNumbers(sArr []string) ([]map[int]string, []map[int]string) {
 						break out
 					}
 				}
-				numbers[i][index] = digit
+				xy := &xy{
+					x: index,
+					y: i,
+				}
+				numbers[*xy] = digit
+				//numbers[i][index] = digit
 
 			} else {
+				xy := &xy{
+					x: index,
+					y: i,
+				}
 				//fmt.Printf("found a special char! %c\n", char)
-				specialChars[i][j] = string(r)
+				specialChars[*xy] = string(r)
 			}
 		}
 
@@ -71,48 +83,52 @@ func getCharsAndNumbers(sArr []string) ([]map[int]string, []map[int]string) {
 	return specialChars, numbers
 }
 
-func addHitsToTotal(specialChars []map[int]string, numbers []map[int]string, total *int) {
-	for i := 0; i < len(numbers); i++ {
-		for j, d := range numbers[i] {
+func addHitsToTotal(specialChars map[xy]string, numbers map[xy]string, total *int) {
+	// for i := 0; i < len(numbers); i++ {
+	// 	pos := &xy{
+	// 		x: 0,
+	// 		y: i,
+	// 	}
+	for k, v := range numbers {
 
-			valid := false
-			if j > 0 {
-				if _, exists := specialChars[i][j-1]; exists {
-					valid = true
-				}
-			}
-			//if j+len(d) <= len(specialChars[i]) && !valid {
-			if _, exists := specialChars[i][j+len(d)]; exists {
+		valid := false
+		if k.y > 0 {
+			if _, exists := specialChars[xy{k.x - 1, k.y}]; exists {
 				valid = true
 			}
-			//}
-			if i == 0 && !valid {
-				//fmt.Printf("check below\n")
-				if existsAboveOrBelow(i, j, specialChars, (len(d)), "below") {
-					valid = true
-				}
-			} else if i == 139 && !valid {
-				//fmt.Printf("check above\n")
-				if existsAboveOrBelow(i, j, specialChars, (len(d)), "above") {
-					valid = true
-				}
-			} else {
-				//fmt.Printf("check both\n")
-				if existsAboveOrBelow(i, j, specialChars, (len(d)), "both") && !valid {
-					valid = true
-				}
+		}
+		//if j+len(d) <= len(specialChars[i]) && !valid {i][j+len(d)
+		if _, exists := specialChars[xy{k.x + len(v), k.y}]; exists {
+			valid = true
+		}
+		//}
+		if k.x == 0 && !valid {
+			//fmt.Printf("check below\n")
+			if existsAboveOrBelow(k, specialChars, (len(v)), "below") {
+				valid = true
 			}
-			if valid {
-				if d != "" {
-					fmt.Printf("match: %v\n", d)
-					fmt.Printf("number: %v\n", d)
-					fmt.Printf("index: %v\nline: %v\n---\n", j+1, i+1)
-				}
-
-				*total += strToInt(d)
+		} else if k.y == 139 && !valid {
+			//fmt.Printf("check above\n")
+			if existsAboveOrBelow(k, specialChars, (len(v)), "above") {
+				valid = true
+			}
+		} else {
+			//fmt.Printf("check both\n")
+			if existsAboveOrBelow(k, specialChars, (len(v)), "both") && !valid {
+				valid = true
 			}
 		}
+		if valid {
+			if v != "" {
+				fmt.Printf("match: %v\n", v)
+				fmt.Printf("number: %v\n", v)
+				fmt.Printf("index: %v\nline: %v\n---\n", k.x+1, k.y+1)
+			}
+
+			*total += strToInt(v)
+		}
 	}
+	//}
 }
 
 func strToInt(s string) int {
@@ -124,17 +140,17 @@ func strToInt(s string) int {
 	return 0
 }
 
-func existsAboveOrBelow(row int, index int, specialChars []map[int]string, numLen int, check string) bool {
-	if index == 0 {
+func existsAboveOrBelow(pos xy, specialChars map[xy]string, numLen int, check string) bool {
+	if pos.x == 0 {
 		//make "index -1" become 0
-		index = 1
+		pos.x = 1
 	} else {
-		index = index - 1
+		pos.x = pos.x - 1
 	}
 	if check == "above" || check == "both" {
 		for i := 0; i <= numLen+1; i++ {
 
-			if _, exists := specialChars[row-1][index+i]; exists {
+			if _, exists := specialChars[xy{pos.x - 1, pos.y + i}]; exists {
 				return true
 			}
 		}
@@ -143,7 +159,7 @@ func existsAboveOrBelow(row int, index int, specialChars []map[int]string, numLe
 		for i := 0; i <= numLen+1; i++ {
 			//fmt.Printf("index: %v\n value:", index)
 
-			if _, exists := specialChars[row+1][index+i]; exists {
+			if _, exists := specialChars[xy{pos.x + 1, pos.y + i}]; exists {
 				return true
 			}
 		}
