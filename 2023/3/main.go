@@ -61,6 +61,40 @@ func getCharsAndNumbers(sArr []string) ([]map[int]string, []map[int]string) {
 				}
 				numbers[i][index] = digit
 
+				valid := false
+				if index > 0 {
+					if _, exists := specialChars[i][index-1]; exists {
+						valid = true
+					}
+				}
+				if len(specialChars[i]) >= index+len(digit)+1 {
+					if _, exists := specialChars[i][index+len(digit)+1]; exists {
+						fmt.Printf("found right digit: %v\n", digit)
+						valid = true
+					}
+				}
+				if i == 0 {
+					//fmt.Printf("check below\n")
+					if existsAboveOrBelow(i, index, specialChars, (len(digit)), "below") {
+						valid = true
+					}
+				} else if i == 139 {
+					//fmt.Printf("check above\n")
+					if existsAboveOrBelow(i, index, specialChars, (len(digit)), "above") {
+						valid = true
+					}
+				} else {
+					//fmt.Printf("check both\n")
+					if existsAboveOrBelow(i, index, specialChars, (len(digit)), "both") {
+						valid = true
+					}
+				}
+				if valid {
+					fmt.Printf("match: %v\n", digit)
+					fmt.Printf("number: %v\n", digit)
+					fmt.Printf("index: %v\nline: %v\n---\n", index, i)
+					total += strToInt(digit)
+				}
 			} else {
 				//fmt.Printf("found a special char! %c\n", char)
 				specialChars[i][j] = string(r)
