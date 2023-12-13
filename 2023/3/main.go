@@ -74,7 +74,6 @@ func getCharsAndNumbers(sArr []string) ([]map[int]string, []map[int]string) {
 func addHitsToTotal(specialChars []map[int]string, numbers []map[int]string, total *int) {
 	for i := 0; i < len(numbers); i++ {
 		for j, d := range numbers[i] {
-
 			valid := false
 			if j > 0 {
 				if _, exists := specialChars[i][j-1]; exists {
