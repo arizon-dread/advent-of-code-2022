@@ -92,7 +92,7 @@ func addHitsToTotal(specialChars map[xy]string, numbers map[xy]string, total *in
 	for k, v := range numbers {
 
 		valid := false
-		if k.y > 0 {
+		if k.x > 0 {
 			if _, exists := specialChars[xy{k.x - 1, k.y}]; exists {
 				valid = true
 			}
@@ -102,7 +102,7 @@ func addHitsToTotal(specialChars map[xy]string, numbers map[xy]string, total *in
 			valid = true
 		}
 		//}
-		if k.x == 0 && !valid {
+		if k.y == 0 && !valid {
 			//fmt.Printf("check below\n")
 			if existsAboveOrBelow(k, specialChars, (len(v)), "below") {
 				valid = true
@@ -150,7 +150,7 @@ func existsAboveOrBelow(pos xy, specialChars map[xy]string, numLen int, check st
 	if check == "above" || check == "both" {
 		for i := 0; i <= numLen+1; i++ {
 
-			if _, exists := specialChars[xy{pos.x - 1, pos.y + i}]; exists {
+			if _, exists := specialChars[xy{pos.x + i, pos.y - 1}]; exists {
 				return true
 			}
 		}
@@ -159,7 +159,7 @@ func existsAboveOrBelow(pos xy, specialChars map[xy]string, numLen int, check st
 		for i := 0; i <= numLen+1; i++ {
 			//fmt.Printf("index: %v\n value:", index)
 
-			if _, exists := specialChars[xy{pos.x + 1, pos.y + i}]; exists {
+			if _, exists := specialChars[xy{pos.x + i, pos.y + 1}]; exists {
 				return true
 			}
 		}
