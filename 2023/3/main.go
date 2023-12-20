@@ -32,25 +32,40 @@ func main() {
 }
 
 func calcGearRatio(potentialGears map[xy]string, gearRatio *int) {
-	for _, v := range potentialGears {
+	for k, v := range potentialGears {
 		gear := strings.TrimPrefix(v, "*")
 		gear = strings.TrimSuffix(gear, "*")
-		gears := strings.Split(gear, "*")
+		tmpGears := strings.Split(gear, "*")
+		gears := removeDuplicateStr(tmpGears)
+
 		if len(gears) == 2 {
 			gear1, err1 := strconv.Atoi(gears[0])
 			gear2, err2 := strconv.Atoi(gears[1])
 			if err1 == nil && err2 == nil {
-				if gear1 != gear2 { //??
-					*gearRatio += (gear1 * gear2)
-				}
-
+				//if gear1 != gear2 { //??
+				*gearRatio += (gear1 * gear2)
+				//}
+				fmt.Printf("gear at row: %v, col: %v, gear1: %v, gear2: %v\n", k.y+1, k.x+1, gear1, gear2)
 			}
 			//too high: 84836005
+			//too low: 84084546
 			//too low:  83736002
+		} else {
+			//fmt.Printf("potential gear with length != 2 at row: %v, col: %v. length was: %v, gears were: %v\n", k.y+1, k.x+1, len(gears), gears)
 		}
 	}
 }
-
+func removeDuplicateStr(strSlice []string) []string {
+	allKeys := make(map[string]bool)
+	list := []string{}
+	for _, item := range strSlice {
+		if _, value := allKeys[item]; !value {
+			allKeys[item] = true
+			list = append(list, item)
+		}
+	}
+	return list
+}
 func getCharsAndNumbersAndPotentialGears(sArr []string) (map[xy]string, map[xy]string, map[xy]string) {
 
 	specialChars := make(map[xy]string)
@@ -101,6 +116,7 @@ func getCharsAndNumbersAndPotentialGears(sArr []string) (map[xy]string, map[xy]s
 				//fmt.Printf("found a special char! %c\n", char)
 				specialChars[*xy] = string(r)
 				if r == '*' {
+					//fmt.Printf("found gear at row %v and col %v\n", xy.y, xy.x)
 					potentialGears[*xy] = string(r)
 				}
 			}
@@ -139,7 +155,7 @@ func addHitsToTotal(specialChars map[xy]string, potentialGears *map[xy]string, n
 		//}
 		if k.y == 0 {
 			//fmt.Printf("check below\n")
-			if exists, _ := existsAboveOrBelow(k, specialChars, (len(v)), "below"); exists {
+			if exists, _ := existsAboveOrBelow(k, specialChars, len(v), "below"); exists {
 				valid = true
 			}
 			if exists, pos := existsAboveOrBelow(k, (*potentialGears), len(v), "below"); exists {
@@ -167,7 +183,7 @@ func addHitsToTotal(specialChars map[xy]string, potentialGears *map[xy]string, n
 			}
 		} else {
 			//fmt.Printf("check both\n")
-			if exists, _ := existsAboveOrBelow(k, specialChars, (len(v)), "both"); exists && !valid {
+			if exists, _ := existsAboveOrBelow(k, specialChars, (len(v)), "both"); exists {
 				valid = true
 			}
 			if exists, pos := existsAboveOrBelow(k, (*potentialGears), len(v), "both"); exists {
@@ -199,10 +215,9 @@ func strToInt(s string) int {
 }
 
 func existsAboveOrBelow(pos xy, specialChars map[xy]string, numLen int, check string) (bool, xy) {
-	if pos.x == 0 {
+	if pos.x != 0 {
 		//make "index -1" become 0
-		pos.x = 1
-	} else {
+		//pos.x = 0
 		pos.x = pos.x - 1
 	}
 	if check == "above" || check == "both" {
