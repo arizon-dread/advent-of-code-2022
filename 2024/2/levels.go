@@ -8,8 +8,8 @@ import (
 
 func calculateLevels(input string) int {
 	var sum int = 0
-	line := strings.Split(input, "\n")
-	for _, l := range line {
+	lines := strings.Split(input, "\n")
+	for _, l := range lines {
 		if uniDirectional(l) {
 			if safeAdjacent(l) {
 				sum++
