@@ -157,6 +157,8 @@ func Test_uniDirectional(t *testing.T) {
 	isUnidirectionalDesc := args{"7 6 4 2 1"}
 	isNotUnidirectional1 := args{"1 3 2 4 5"}
 	isNotUnidirectional2 := args{"8 6 4 4 1"}
+	isNotUnidirectional3 := args{"8 5 3 2 3"}
+
 	isUnsafeInput5 := "13 14 17 20 21 26 26"
 	isUnsafeInput6 := "96 97 96 93 89 88 86"
 	isUnsafeInput7 := "39 45 46 43 44 45"
@@ -193,6 +195,8 @@ func Test_uniDirectional(t *testing.T) {
 		{"Safe Descending", isUnidirectionalDesc, true},
 		{"Unsafe", isNotUnidirectional1, false},
 		{"Unsafe 2", isNotUnidirectional2, false},
+		{"Unsafe test10", isNotUnidirectional3, false},
+
 		{"Unsafe test5", args{isUnsafeInput5}, false},
 		{"Unsafe test6", args{isUnsafeInput6}, false},
 		{"Unsafe test7", args{isUnsafeInput7}, false},

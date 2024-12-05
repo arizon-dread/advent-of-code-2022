@@ -50,9 +50,6 @@ func uniDirectional(line string) bool {
 	asc := false
 	desc := false
 	for i, v := range l {
-		if asc && desc {
-			return false
-		}
 		if i > 0 {
 			curr, err := strconv.Atoi(v)
 			if err != nil {
@@ -69,6 +66,9 @@ func uniDirectional(line string) bool {
 			} else if curr < prev {
 				desc = true
 			} else {
+				return false
+			}
+			if asc && desc {
 				return false
 			}
 		}
