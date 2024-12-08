@@ -233,3 +233,33 @@ func Test_uniDirectional(t *testing.T) {
 		})
 	}
 }
+
+func Test_retry(t *testing.T) {
+	type args struct {
+		line string
+	}
+	isSafeInput1 := "13 14 17 20 21 23 23"
+	isUnsafeInput2 := "96 97 96 93 89 88 86"
+	isUnsafeInput3 := "39 45 46 43 44 45"
+	isSafeInput4 := "83 80 77 75 72 72"
+	isUnsafeInput5 := "86 88 89 90 92 93 92 91"
+
+	tests := []struct {
+		name string
+		args args
+		want bool
+	}{
+		{"safe 1", args{isSafeInput1}, true},
+		{"unsafe 1", args{isUnsafeInput2}, false},
+		{"unsafe 2", args{isUnsafeInput3}, false},
+		{"safe 2", args{isSafeInput4}, true},
+		{"unsafe 3", args{isUnsafeInput5}, false},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := retry(tt.args.line); got != tt.want {
+				t.Errorf("retry() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}

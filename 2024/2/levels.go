@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"slices"
 	"strconv"
 	"strings"
 )
@@ -10,13 +11,40 @@ func calculateLevels(input string) int {
 	var sum int = 0
 	lines := strings.Split(input, "\n")
 	for _, l := range lines {
+		retryIfUnsafe := false
 		if uniDirectional(l) {
 			if safeAdjacent(l) {
 				sum++
+			} else {
+				retryIfUnsafe = true
 			}
+		} else {
+			retryIfUnsafe = true
+		}
+
+		if retryIfUnsafe {
+			if isSafe := retry(l); isSafe {
+				sum++
+			}
+
 		}
 	}
 	return sum
+}
+
+func retry(line string) bool {
+	l := strings.Split(line, " ")
+	for i := 0; i < len(l); i++ {
+		tmp := slices.Clone(l)
+		tmp = slices.Delete[[]string](tmp, i, i+1)
+		s := strings.Join(tmp, " ")
+		if uniDirectional(s) {
+			if safeAdjacent(s) {
+				return true
+			}
+		}
+	}
+	return false
 }
 
 func safeAdjacent(line string) bool {
